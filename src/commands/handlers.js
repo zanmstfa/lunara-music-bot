@@ -247,19 +247,19 @@ async function handleHelp(interaction) {
     .addFields(
       {
         name: 'Mulai mendengarkan',
-        value: '`/play` lagu atau URL • `/mood` radio tanpa habis • `/nowplaying`',
+        value: '`/play` atau `l!p` lagu/URL • `/mood` atau `l!mood` • `/nowplaying` atau `l!np`',
       },
       {
         name: 'Kontrol',
-        value: '`/pause` • `/skip` • `/previous` • `/seek` • `/volume` • `/stop`',
+        value: '`l!pause` • `l!s` • `l!prev` • `l!seek` • `l!vol` • `l!stop`',
       },
       {
         name: 'Antrean',
-        value: '`/queue` • `/shuffle` • `/remove` • `/move` • `/loop`',
+        value: '`l!q` • `l!shuffle` • `l!rm` • `l!move` • `l!loop`',
       },
       {
         name: 'Ekstra',
-        value: '`/filter` untuk efek audio • `/lyrics` untuk lirik',
+        value: '`l!filter` untuk efek audio • `l!lyrics` untuk lirik. Semua versi slash command tetap tersedia.',
       },
       {
         name: 'Aturan sesi',

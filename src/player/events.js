@@ -52,7 +52,7 @@ export function registerPlayerEvents(player, client) {
     await channel?.send({
       embeds: [simpleEmbed(
         'Sesi selesai',
-        'Antrean sudah habis. Gunakan `/play` atau `/mood` untuk mulai lagi.',
+        'Antrean sudah habis. Gunakan `/play`, `l!p`, `/mood`, atau `l!mood` untuk mulai lagi.',
         COLORS.neutral,
       )],
     }).catch(() => null);

@@ -2,6 +2,13 @@
 
 Bot musik Discord full JavaScript yang terinspirasi oleh pengalaman pakai Jockie Music, tetapi punya identitas dan alur sendiri: **Mood Radio**, vote skip, preset audio, lirik, sumber cadangan, dan panel kontrol tombol.
 
+## Versi 1.2
+
+- Prefix command `l!` tersedia berdampingan dengan slash command.
+- Gunakan `l!p` untuk play, `l!s` untuk skip, `l!stop` untuk menghentikan sesi, dan `l!help` untuk melihat semua command.
+- Input prefix divalidasi sebelum diteruskan ke pemutar, jadi salah format akan mendapat contoh pemakaian.
+- Prefix dapat diganti melalui `BOT_PREFIX`, dengan default tetap `l!`.
+
 ## Versi 1.1
 
 - Pencarian teks tetap memakai katalog Spotify untuk judul, artis, sampul, dan tautan.
@@ -23,7 +30,7 @@ Bot musik Discord full JavaScript yang terinspirasi oleh pengalaman pakai Jockie
 - Pencarian lirik melalui LRCLIB, termasuk lampiran `.txt` jika lirik terlalu panjang.
 - Kontrol DJ: peminta lagu, role bernama `DJ`, atau member dengan izin Manage Server.
 - Keluar otomatis jika voice channel kosong.
-- Tidak membutuhkan Message Content Intent karena seluruh kontrol memakai slash command.
+- Slash command dan prefix command `l!` dapat dipakai berdampingan.
 
 ## Kebutuhan
 
@@ -45,6 +52,7 @@ Bot musik Discord full JavaScript yang terinspirasi oleh pengalaman pakai Jockie
    DISCORD_TOKEN=token_bot
    CLIENT_ID=id_aplikasi
    DEV_GUILD_ID=id_server_tes
+   BOT_PREFIX=l!
    ```
 
    `DEV_GUILD_ID` disarankan saat pengembangan karena command akan muncul hampir seketika. Hapus nilainya ketika ingin mendaftarkan command secara global.
@@ -72,9 +80,9 @@ Bot musik Discord full JavaScript yang terinspirasi oleh pengalaman pakai Jockie
 Pada menu **OAuth2 → URL Generator** di Discord Developer Portal:
 
 - Pilih scope `bot` dan `applications.commands`.
-- Berikan izin minimal: View Channels, Send Messages, Embed Links, Attach Files, Connect, Speak, dan Use Application Commands.
+- Berikan izin minimal: View Channels, Send Messages, Read Message History, Embed Links, Attach Files, Connect, Speak, dan Use Application Commands.
 
-Lunara hanya memerlukan intent **Guilds** dan **Guild Voice States**.
+Karena prefix membaca pesan biasa, buka menu **Bot → Privileged Gateway Intents**, aktifkan **Message Content Intent**, lalu tekan **Save Changes**. Lunara juga memakai intent **Guilds**, **Guild Messages**, dan **Guild Voice States** dari kode.
 
 ## Command
 
@@ -98,6 +106,28 @@ Lunara hanya memerlukan intent **Guilds** dan **Guild Voice States**.
 | `/move` | Pindahkan posisi lagu |
 | `/help` | Ringkasan command |
 
+## Prefix command
+
+| Prefix | Fungsi |
+|---|---|
+| `l!p <judul atau URL>` | Cari lagu atau tambahkan playlist |
+| `l!mood <pilihan>` | Mulai Mood Radio: chill, focus, party, galau, atau nusantara |
+| `l!pause` | Jeda atau lanjut |
+| `l!s` | Vote skip |
+| `l!prev` | Putar lagu sebelumnya |
+| `l!stop` | Hentikan sesi dan kosongkan antrean |
+| `l!q [halaman]` | Lihat antrean |
+| `l!np` | Tampilkan panel lagu aktif |
+| `l!vol <1-100>` | Atur volume |
+| `l!loop <mode>` | Gunakan off, track, queue, atau autoplay |
+| `l!shuffle` | Acak antrean |
+| `l!seek <waktu>` | Lompat ke detik atau format `mm:ss` |
+| `l!filter <preset>` | Terapkan preset audio |
+| `l!lyrics` | Cari lirik lagu aktif |
+| `l!rm <posisi>` | Hapus lagu dari antrean |
+| `l!move <dari> <ke>` | Pindahkan posisi lagu |
+| `l!help` | Ringkasan command |
+
 ## Menjalankan dengan Docker
 
 Pastikan `.env` sudah tersedia, lalu:
@@ -111,6 +141,7 @@ docker run --env-file .env --restart unless-stopped lunara-music
 
 | Variable | Default | Keterangan |
 |---|---:|---|
+| `BOT_PREFIX` | `l!` | Prefix untuk command berbasis pesan |
 | `DEFAULT_VOLUME` | `70` | Volume awal, 1–100 |
 | `LEAVE_ON_EMPTY_MS` | `300000` | Waktu tunggu sebelum keluar dari channel kosong |
 | `MAX_PLAYLIST_SIZE` | `100` | Batas lagu dari satu playlist |
@@ -128,4 +159,4 @@ Pemilik bot bertanggung jawab mematuhi ketentuan layanan sumber musik dan aturan
 npm run check
 ```
 
-Perintah ini menjalankan pemeriksaan sintaks entry point dan seluruh unit test untuk parser waktu, vote skip, serta kesesuaian slash command dengan handler.
+Perintah ini menjalankan pemeriksaan sintaks entry point dan seluruh unit test untuk parser waktu, prefix command, vote skip, serta kesesuaian slash command dengan handler.

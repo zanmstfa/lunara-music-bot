@@ -11,13 +11,16 @@ import { handlers } from './commands/handlers.js';
 import { config, validateConfig } from './config.js';
 import { handlePlayerButton } from './interactions/buttons.js';
 import { registerPlayerEvents } from './player/events.js';
+import { handlePrefixMessage } from './prefix/index.js';
 
 validateConfig();
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.MessageContent,
   ],
 });
 
@@ -34,7 +37,7 @@ registerPlayerEvents(player, client);
 client.once(Events.ClientReady, (readyClient) => {
   readyClient.user.setPresence({
     activities: [{
-      name: '/play • /mood',
+      name: 'l!p • /play',
       type: ActivityType.Listening,
     }],
     status: 'online',
@@ -67,6 +70,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } else {
       await interaction.reply(payload).catch(() => null);
     }
+  }
+});
+
+client.on(Events.MessageCreate, async (message) => {
+  if (message.author.bot || !message.inGuild()) return;
+  if (!message.content.toLowerCase().startsWith(config.prefix.toLowerCase())) return;
+
+  try {
+    await handlePrefixMessage(message, player, config.prefix);
+  } catch (error) {
+    console.error(`[message:${message.id}]`, error);
+    await message.reply({
+      content: 'Terjadi kesalahan saat menjalankan command. Coba lagi sebentar.',
+      allowedMentions: { repliedUser: false },
+    }).catch(() => null);
   }
 });
 

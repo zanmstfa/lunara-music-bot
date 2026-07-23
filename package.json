@@ -1,6 +1,6 @@
 {
   "name": "lunara-music-bot",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Bot musik Discord full JavaScript dengan mood radio, vote skip, kontrol tombol, dan antrean pintar.",
   "type": "module",
   "main": "src/index.js",
