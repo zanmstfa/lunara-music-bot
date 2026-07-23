@@ -59,6 +59,7 @@ export function playerControls(queue) {
 export function nowPlayingPayload(queue, track = queue.currentTrack) {
   const requester = track?.requestedBy ? `<@${track.requestedBy.id}>` : 'Autoplay';
   const theme = guildThemes.get(queue.guild.id);
+  const catalogUrl = track?.metadata?.catalogUrl;
   const embed = new EmbedBuilder()
     .setColor(COLORS.primary)
     .setAuthor({ name: 'LUNARA • NOW PLAYING' })
@@ -75,7 +76,8 @@ export function nowPlayingPayload(queue, track = queue.currentTrack) {
     .setFooter({ text: 'Kontrol hanya bisa dipakai dari voice channel yang sama.' })
     .setTimestamp();
 
-  if (isWebUrl(track?.url)) embed.setURL(track.url);
+  if (isWebUrl(catalogUrl)) embed.setURL(catalogUrl);
+  else if (isWebUrl(track?.url)) embed.setURL(track.url);
   if (isWebUrl(track?.thumbnail)) embed.setThumbnail(track.thumbnail);
 
   return { embeds: [embed], components: [playerControls(queue)] };

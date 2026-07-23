@@ -1,5 +1,9 @@
 import { QueryType, QueueRepeatMode } from 'discord-player';
 import { config } from '../config.js';
+import {
+  applyCatalogMetadata,
+  selectBestCandidate,
+} from './track-matcher.js';
 
 const SEARCH_ENGINES = Object.freeze({
   auto: QueryType.SPOTIFY_SEARCH,
@@ -8,9 +12,10 @@ const SEARCH_ENGINES = Object.freeze({
 });
 
 const URL_PATTERN = /^https?:\/\//i;
+const SPOTIFY_URL_PATTERN = /^https?:\/\/open\.spotify\.com\//i;
 
 export function resolveSearchEngine(query, source = 'auto') {
-  if (source === 'auto' && URL_PATTERN.test(query)) {
+  if (URL_PATTERN.test(query)) {
     return QueryType.AUTO;
   }
 
@@ -48,7 +53,57 @@ function playerOptions(interaction, query, source) {
   };
 }
 
+function shouldMatchSpotify(query, source) {
+  if (!['auto', 'spotify'].includes(source)) return false;
+  return !URL_PATTERN.test(query) || SPOTIFY_URL_PATTERN.test(query);
+}
+
+async function findSpotifyReference(player, interaction, query) {
+  const result = await player.search(query, {
+    requestedBy: interaction.user,
+    searchEngine: URL_PATTERN.test(query) ? QueryType.AUTO : QueryType.SPOTIFY_SEARCH,
+  });
+
+  if (result.playlist) return null;
+  return result.tracks[0];
+}
+
+async function findBestSoundCloudMatch(player, interaction, referenceTrack) {
+  const result = await player.search(
+    `${referenceTrack.author} ${referenceTrack.title}`,
+    {
+      requestedBy: interaction.user,
+      searchEngine: QueryType.SOUNDCLOUD_SEARCH,
+    },
+  );
+  const match = selectBestCandidate(referenceTrack, result.tracks);
+  return match ? applyCatalogMetadata(match, referenceTrack) : null;
+}
+
+async function playMatchedTrack(player, interaction, voiceChannel, query) {
+  const referenceTrack = await findSpotifyReference(player, interaction, query);
+  if (!referenceTrack) return null;
+
+  const playableTrack = await findBestSoundCloudMatch(player, interaction, referenceTrack);
+  if (!playableTrack) return null;
+
+  return player.play(
+    voiceChannel,
+    playableTrack,
+    playerOptions(interaction, playableTrack.url, 'soundcloud'),
+  );
+}
+
 export async function playQuery(player, interaction, voiceChannel, query, source = 'auto') {
+  if (shouldMatchSpotify(query, source)) {
+    try {
+      const matched = await playMatchedTrack(player, interaction, voiceChannel, query);
+      if (matched) return matched;
+    } catch (error) {
+      console.warn('[audio-match] Pencocokan pintar gagal, memakai pencarian biasa:', error.message);
+    }
+  }
+
   try {
     return await player.play(voiceChannel, query, playerOptions(interaction, query, source));
   } catch (error) {

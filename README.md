@@ -2,9 +2,18 @@
 
 Bot musik Discord full JavaScript yang terinspirasi oleh pengalaman pakai Jockie Music, tetapi punya identitas dan alur sendiri: **Mood Radio**, vote skip, preset audio, lirik, sumber cadangan, dan panel kontrol tombol.
 
+## Versi 1.1
+
+- Pencarian teks tetap memakai katalog Spotify untuk judul, artis, sampul, dan tautan.
+- Lunara membandingkan hingga 10 kandidat SoundCloud sebelum memilih audio.
+- Skor kecocokan mempertimbangkan judul, artis, selisih durasi, serta ketersediaan transcoding berkualitas tinggi.
+- Cover, karaoke, live, remix, slowed, nightcore, dan versi lain tidak dipilih kecuali memang tertulis pada judul Spotify.
+- Jika pencocokan pintar tidak menemukan hasil yang layak, Lunara kembali ke pencarian standar supaya command tetap berjalan.
+- URL playlist Spotify tetap dimuat sebagai playlist dan tidak dipotong menjadi satu lagu.
+
 ## Yang sudah tersedia
 
-- Pencarian judul memprioritaskan katalog Spotify. URL Spotify, SoundCloud, Apple Music, Vimeo, dan attachment audio tetap didukung.
+- Pencarian judul memprioritaskan katalog Spotify dengan pencocokan audio SoundCloud yang mempertimbangkan judul, artis, durasi, versi, dan kualitas transcoding. URL Spotify, SoundCloud, Apple Music, Vimeo, dan attachment audio tetap didukung.
 - Queue, playlist, pause, previous, seek, shuffle, move, remove, volume, dan empat mode loop.
 - Koneksi voice modern dengan dukungan enkripsi end-to-end Discord DAVE.
 - Panel **Now Playing** dengan tombol previous, pause, skip, loop, dan stop.
@@ -109,7 +118,7 @@ Jangan pernah memasukkan `.env` ke Git. `.gitignore` sudah disiapkan.
 
 ## Catatan sumber audio
 
-Saat kamu mengetik judul lagu, Lunara mencari kecocokan di katalog Spotify terlebih dahulu agar judul, artis, sampul, dan tautannya konsisten. Spotify tidak menyediakan stream audio langsung untuk bot Discord, jadi Discord Player menjembatani hasil tersebut ke SoundCloud untuk audionya. URL sumber lain tetap dideteksi otomatis.
+Saat kamu mengetik judul lagu, Lunara mencari kecocokan di katalog Spotify terlebih dahulu agar judul, artis, sampul, dan tautannya konsisten. Spotify tidak menyediakan stream audio langsung untuk bot Discord, jadi Lunara membandingkan beberapa kandidat SoundCloud dan memilih audio yang paling mendekati versi Spotify. Library SoundCloud mengutamakan transcoding `hq` ketika tersedia. URL sumber lain tetap dideteksi otomatis.
 
 Pemilik bot bertanggung jawab mematuhi ketentuan layanan sumber musik dan aturan hak cipta yang berlaku.
 
