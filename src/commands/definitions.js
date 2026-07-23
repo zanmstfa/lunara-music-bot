@@ -19,8 +19,7 @@ export const commands = [
       .setName('sumber')
       .setDescription('Sumber pencarian')
       .addChoices(
-        { name: 'Otomatis', value: 'auto' },
-        { name: 'YouTube', value: 'youtube' },
+        { name: 'Spotify (utama)', value: 'auto' },
         { name: 'SoundCloud', value: 'soundcloud' },
         { name: 'Spotify', value: 'spotify' },
       )),

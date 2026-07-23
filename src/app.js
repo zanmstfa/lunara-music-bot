@@ -7,9 +7,8 @@ import {
 } from 'discord.js';
 import { DefaultExtractors } from '@discord-player/extractor';
 import { Player } from 'discord-player';
-import { YoutubeiExtractor } from 'discord-player-youtubei';
 import { handlers } from './commands/handlers.js';
-import { config, validateConfig } from './config.js';
+import { validateConfig } from './config.js';
 import { handlePlayerButton } from './interactions/buttons.js';
 import { registerPlayerEvents } from './player/events.js';
 
@@ -29,11 +28,6 @@ const player = new Player(client, {
 });
 
 await player.extractors.loadMulti(DefaultExtractors);
-await player.extractors.register(YoutubeiExtractor, {
-  cookie: config.youtubeCookie ?? undefined,
-  ignoreSignInErrors: true,
-  logLevel: 'NONE',
-});
 
 registerPlayerEvents(player, client);
 

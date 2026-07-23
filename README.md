@@ -4,7 +4,7 @@ Bot musik Discord full JavaScript yang terinspirasi oleh pengalaman pakai Jockie
 
 ## Yang sudah tersedia
 
-- Pencarian judul atau URL dari YouTube, SoundCloud, Spotify, Apple Music, Vimeo, dan attachment audio.
+- Pencarian judul memprioritaskan katalog Spotify. URL Spotify, SoundCloud, Apple Music, Vimeo, dan attachment audio tetap didukung.
 - Queue, playlist, pause, previous, seek, shuffle, move, remove, volume, dan empat mode loop.
 - Koneksi voice modern dengan dukungan enkripsi end-to-end Discord DAVE.
 - Panel **Now Playing** dengan tombol previous, pause, skip, loop, dan stop.
@@ -105,15 +105,13 @@ docker run --env-file .env --restart unless-stopped lunara-music
 | `DEFAULT_VOLUME` | `70` | Volume awal, 1–100 |
 | `LEAVE_ON_EMPTY_MS` | `300000` | Waktu tunggu sebelum keluar dari channel kosong |
 | `MAX_PLAYLIST_SIZE` | `100` | Batas lagu dari satu playlist |
-| `YOUTUBE_COOKIE` | kosong | Cookie akun jika YouTube membatasi pemutaran |
-
-Jangan pernah memasukkan `.env` atau cookie ke Git. `.gitignore` sudah disiapkan.
+Jangan pernah memasukkan `.env` ke Git. `.gitignore` sudah disiapkan.
 
 ## Catatan sumber audio
 
-Extractor resmi Discord Player menyediakan SoundCloud dan sumber metadata seperti Spotify/Apple Music. Dukungan YouTube memakai `discord-player-youtubei`, yaitu extractor komunitas karena Discord Player v7 tidak lagi menyertakan extractor YouTube resmi. Struktur YouTube dapat berubah sewaktu-waktu; Lunara otomatis mencoba SoundCloud untuk pencarian teks ketika YouTube gagal.
+Saat kamu mengetik judul lagu, Lunara mencari kecocokan di katalog Spotify terlebih dahulu agar judul, artis, sampul, dan tautannya konsisten. Spotify tidak menyediakan stream audio langsung untuk bot Discord, jadi Discord Player menjembatani hasil tersebut ke SoundCloud untuk audionya. URL sumber lain tetap dideteksi otomatis.
 
-Pemilik bot bertanggung jawab mematuhi ketentuan layanan sumber musik dan aturan hak cipta yang berlaku. Cookie YouTube bersifat opsional dan sebaiknya memakai akun khusus, bukan akun utama.
+Pemilik bot bertanggung jawab mematuhi ketentuan layanan sumber musik dan aturan hak cipta yang berlaku.
 
 ## Pemeriksaan
 

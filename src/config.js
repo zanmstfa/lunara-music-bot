@@ -11,7 +11,6 @@ export const config = Object.freeze({
   defaultVolume: toInteger(process.env.DEFAULT_VOLUME, 70, 1, 100),
   leaveOnEmptyMs: toInteger(process.env.LEAVE_ON_EMPTY_MS, 300_000, 10_000, 3_600_000),
   maxPlaylistSize: toInteger(process.env.MAX_PLAYLIST_SIZE, 100, 1, 500),
-  youtubeCookie: process.env.YOUTUBE_COOKIE || null,
 });
 
 export function validateConfig({ deploy = false } = {}) {

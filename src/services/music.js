@@ -2,16 +2,25 @@ import { QueryType, QueueRepeatMode } from 'discord-player';
 import { config } from '../config.js';
 
 const SEARCH_ENGINES = Object.freeze({
-  auto: QueryType.AUTO,
-  youtube: QueryType.YOUTUBE_SEARCH,
+  auto: QueryType.SPOTIFY_SEARCH,
   soundcloud: QueryType.SOUNDCLOUD_SEARCH,
   spotify: QueryType.SPOTIFY_SEARCH,
 });
 
-function playerOptions(interaction, source) {
+const URL_PATTERN = /^https?:\/\//i;
+
+export function resolveSearchEngine(query, source = 'auto') {
+  if (source === 'auto' && URL_PATTERN.test(query)) {
+    return QueryType.AUTO;
+  }
+
+  return SEARCH_ENGINES[source] ?? QueryType.SPOTIFY_SEARCH;
+}
+
+function playerOptions(interaction, query, source) {
   return {
     requestedBy: interaction.user,
-    searchEngine: SEARCH_ENGINES[source] ?? QueryType.AUTO,
+    searchEngine: resolveSearchEngine(query, source),
     nodeOptions: {
       metadata: { textChannelId: interaction.channelId },
       volume: config.defaultVolume,
@@ -41,17 +50,21 @@ function playerOptions(interaction, source) {
 
 export async function playQuery(player, interaction, voiceChannel, query, source = 'auto') {
   try {
-    return await player.play(voiceChannel, query, playerOptions(interaction, source));
+    return await player.play(voiceChannel, query, playerOptions(interaction, query, source));
   } catch (error) {
-    const mayFallback = ['auto', 'youtube'].includes(source) && !/^https?:\/\//i.test(query);
+    const mayFallback = ['auto', 'spotify'].includes(source) && !URL_PATTERN.test(query);
     if (!mayFallback) throw error;
 
-    return player.play(voiceChannel, query, playerOptions(interaction, 'soundcloud'));
+    return player.play(
+      voiceChannel,
+      query,
+      playerOptions(interaction, query, 'soundcloud'),
+    );
   }
 }
 
 export async function startMoodRadio(player, interaction, voiceChannel, mood) {
-  const result = await playQuery(player, interaction, voiceChannel, mood.query, 'youtube');
+  const result = await playQuery(player, interaction, voiceChannel, mood.query, 'spotify');
   result.queue.setMetadata({ textChannelId: interaction.channelId });
   result.queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
   return result;
