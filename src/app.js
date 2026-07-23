@@ -8,7 +8,7 @@ import {
 import { DefaultExtractors } from '@discord-player/extractor';
 import { Player } from 'discord-player';
 import { handlers } from './commands/handlers.js';
-import { validateConfig } from './config.js';
+import { config, validateConfig } from './config.js';
 import { handlePlayerButton } from './interactions/buttons.js';
 import { registerPlayerEvents } from './player/events.js';
 
