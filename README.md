@@ -115,7 +115,7 @@ Karena prefix membaca pesan biasa, buka menu **Bot → Privileged Gateway Intent
 | `l!pause` | Jeda atau lanjut |
 | `l!s` | Vote skip |
 | `l!prev` | Putar lagu sebelumnya |
-| `l!stop` | Hentikan sesi dan kosongkan antrean |
+| `l!stop` atau `l!dc` | Hentikan sesi, kosongkan antrean, lalu keluar dari voice channel |
 | `l!q [halaman]` | Lihat antrean |
 | `l!np` | Tampilkan panel lagu aktif |
 | `l!vol <1-100>` | Atur volume |

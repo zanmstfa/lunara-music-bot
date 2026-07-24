@@ -26,6 +26,7 @@ test('l!p mengambil seluruh judul sebagai query', () => {
 test('l!s selalu berarti skip dan l!stop berarti stop', () => {
   assert.equal(parsePrefixCommand('l!s').commandName, 'skip');
   assert.equal(parsePrefixCommand('l!stop').commandName, 'stop');
+  assert.equal(parsePrefixCommand('l!dc').commandName, 'stop');
 });
 
 test('alias antrean dan now playing dipetakan dengan benar', () => {

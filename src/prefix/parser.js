@@ -13,6 +13,7 @@ const COMMAND_ALIASES = Object.freeze({
   prev: 'previous',
   previous: 'previous',
   stop: 'stop',
+  dc: 'stop',
   disconnect: 'stop',
   q: 'queue',
   queue: 'queue',
